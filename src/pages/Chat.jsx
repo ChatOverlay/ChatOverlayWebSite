@@ -35,12 +35,7 @@ export default function Chat() {
     const handleClearLocalStorage = () => {
       localStorage.removeItem('selectedClassroom');
     };
-
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
-
-    return () => {
-      window.electronAPI.removeClearLocalStorage(handleClearLocalStorage); // Cleanup listener on unmount
-    };
   }, []);
   return (
     <Container>

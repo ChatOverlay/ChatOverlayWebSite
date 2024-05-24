@@ -34,8 +34,9 @@ export default function Settings() {
   const [selectedClassroom, setSelectedClassroom] = useState('')
   const navigate = useNavigate()
   
-  window.electronAPI.setIgnoreMouseEvents(false) //login에서 setting 올 때 mouseEventTrue 되는 것 방지
-
+  useEffect(() => {
+    window.electronAPI.setIgnoreMouseEvents(false) // login에서 setting으로 올 때 mouseEventTrue 되는 것 방지
+  }, []);
   const handleRegistration = () => {
     localStorage.setItem('selectedClassroom', selectedClassroom)
     navigate('/chat')

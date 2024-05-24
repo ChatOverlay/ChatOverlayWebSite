@@ -9,7 +9,7 @@ function AppRoutes() {
 
   const verifyToken = useCallback(async (token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL2}/api/verifyToken`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verifyToken`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

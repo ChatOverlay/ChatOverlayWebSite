@@ -31,7 +31,17 @@ export default function Chat() {
       socket.off('message')
     }
   }, [])
+  useEffect(() => {
+    const handleClearLocalStorage = () => {
+      localStorage.removeItem('selectedClassroom');
+    };
 
+    window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
+
+    return () => {
+      window.electronAPI.removeClearLocalStorage(handleClearLocalStorage); // Cleanup listener on unmount
+    };
+  }, []);
   return (
     <Container>
       {messages.map((msg) => (

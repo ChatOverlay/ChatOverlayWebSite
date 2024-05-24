@@ -33,6 +33,16 @@ export default function Settings() {
   const [classrooms, setClassrooms] = useState([])
   const [selectedClassroom, setSelectedClassroom] = useState('')
   const navigate = useNavigate()
+  const handleRegistration = () => {
+    localStorage.setItem('selectedClassroom', selectedClassroom)
+    navigate('/chat')
+  }
+  useEffect(() => {
+    const storedClassroom = localStorage.getItem('selectedClassroom');
+    if (storedClassroom) {
+      navigate('/chat');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (selectedBuilding) {
@@ -42,10 +52,6 @@ export default function Settings() {
     }
   }, [selectedBuilding])
 
-  const handleRegistration = () => {
-    localStorage.setItem('selectedClassroom', selectedClassroom)
-    navigate('/chat')
-  }
 
   return (
     <Container>

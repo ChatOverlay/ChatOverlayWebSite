@@ -7,6 +7,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
+    window.electronAPI.setIgnoreMouseEvents(true)
     // 로컬 스토리지에서 초기 데이터를 비동기로 불러옵니다.
     const classroom = localStorage.getItem('selectedClassroom')
     socket.emit('joinRoom', classroom)

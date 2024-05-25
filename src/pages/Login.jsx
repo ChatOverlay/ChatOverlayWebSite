@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -6,6 +6,34 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const verifyToken = useCallback(async (token) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verifyToken`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        navigate("/settings");
+      } else {
+        localStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.error("토큰 검증 실패:", error);
+      localStorage.removeItem("token");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      verifyToken(token);
+    }
+  }, [verifyToken]);
 
   const handleLogin = async (event) => {
     event.preventDefault(); // 폼 제출 기본 동작 막기

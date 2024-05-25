@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ export default function Login() {
   const handleLogin = async (event) => {
     event.preventDefault(); // 폼 제출 기본 동작 막기
 
-    if (!email || !password) {
+    if (!password) {
       alert("아이디와 비밀번호를 모두 입력해주세요.");
       return;
     }
@@ -48,7 +47,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ password }),
       });
 
       if (response.ok) {
@@ -70,13 +69,6 @@ export default function Login() {
       <Form onSubmit={handleLogin}>
         <Title>클라톡 채팅용 로그인</Title>
         <Input
-          type="id"
-          placeholder="아이디"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <Input
           type="password"
           placeholder="비밀번호"
           value={password}
@@ -89,13 +81,10 @@ export default function Login() {
   );
 }
 
-// Styled-components for styling the form
 const LoginContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #f0f2f5;
   font-family: "Noto Sans KR";
 `;
 

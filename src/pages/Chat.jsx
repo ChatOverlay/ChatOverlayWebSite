@@ -1,17 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import io from 'socket.io-client'
 const socket = io(import.meta.env.VITE_API_URL) 
 
 export default function Chat() {
   const [messages, setMessages] = useState([])
+  const joinMessageAdded = useRef(false); 
 
   useEffect(() => {
-    window.electronAPI.setIgnoreMouseEvents(true)
     // 로컬 스토리지에서 초기 데이터를 비동기로 불러옵니다.
     const classroom = localStorage.getItem('selectedClassroom')
     socket.emit('joinRoom', classroom)
-
+    
+    if (!joinMessageAdded.current) {
+      const joinMessage = { id: Date.now(), text: `${classroom}에 접속을 했습니다.`, expire: Date.now() + 10000 };
+      setMessages((prevMessages) => [...prevMessages, joinMessage]);
+      joinMessageAdded.current = true; 
+    }
     socket.on('message', (message) => {
       const expireTime = Date.now() + 10000
       // 서버로부터 받은 메시지가 객체 형태인 경우 message.text를 사용

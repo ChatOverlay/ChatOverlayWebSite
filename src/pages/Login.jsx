@@ -1,31 +1,38 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Container } from "./Settings";
 
 export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const verifyToken = useCallback(async (token) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verifyToken`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      });
+  const verifyToken = useCallback(
+    async (token) => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/verifyToken`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          }
+        );
 
-      if (response.ok) {
-        navigate("/settings");
-      } else {
+        if (response.ok) {
+          navigate("/settings");
+        } else {
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        console.error("토큰 검증 실패:", error);
         localStorage.removeItem("token");
       }
-    } catch (error) {
-      console.error("토큰 검증 실패:", error);
-      localStorage.removeItem("token");
-    }
-  }, [navigate]);
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,17 +45,20 @@ export default function Login() {
     event.preventDefault(); // 폼 제출 기본 동작 막기
 
     if (!password) {
-      alert("아이디와 비밀번호를 모두 입력해주세요.");
+      alert("비밀번호를 입력해주세요.");
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -56,7 +66,10 @@ export default function Login() {
         navigate("/settings");
       } else {
         const error = await response.json();
-        alert(error.message);
+        alert(
+          error.message +
+            "\n다시 입력하려면 다른 곳을 클릭했다가 다시 클릭해주세요."
+        );
       }
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -65,7 +78,7 @@ export default function Login() {
   };
 
   return (
-    <LoginContainer>
+    <Container>
       <Form onSubmit={handleLogin}>
         <Title>클라톡 채팅용 로그인</Title>
         <Input
@@ -77,16 +90,10 @@ export default function Login() {
         />
         <Button type="submit">Login</Button>
       </Form>
-    </LoginContainer>
+    </Container>
   );
 }
 
-const LoginContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Noto Sans KR";
-`;
 
 const Form = styled.form`
   display: flex;

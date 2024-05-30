@@ -9,10 +9,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<PrivateRoute />}>
+        {/* <Route element={<PrivateRoute />}> */}
           <Route path="/settings" element={<Settings />} />
           <Route path="/chat" element={<Chat />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );

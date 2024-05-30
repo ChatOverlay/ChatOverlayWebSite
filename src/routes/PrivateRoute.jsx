@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-const PrivateRoute = () => {
+const ProtectedRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,16 +10,22 @@ const PrivateRoute = () => {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/verifyToken`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token }),
+              "Authorization": `Bearer ${token}`
+            }
           }
         );
-        return response.ok;
+        
+        if (!response.ok) {
+          return false;
+        }
+
+        const result = await response.json();
+        return result.success;
       } catch (error) {
-        console.error("토큰 검증 실패:", error);
+        console.error("Token verification failed:", error);
         return false;
       }
     };
@@ -27,6 +33,7 @@ const PrivateRoute = () => {
     const isAuthenticated = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
+        console.error('No token found in localStorage');
         return false;
       }
       return await verifyToken(token);
@@ -34,15 +41,19 @@ const PrivateRoute = () => {
 
     const checkAuthentication = async () => {
       const authenticated = await isAuthenticated();
+      
       if (!authenticated) {
-        navigate("/", { replace: true, state: "잘못된 접근입니다." });
+        localStorage.removeItem('token');
+        alert("유효하지 않는 토큰입니다. 다시 로그인해주세요.")
+        navigate("/");
       }
-    };
+   };
 
     checkAuthentication();
   }, [navigate]);
-
   return <Outlet />;
 };
 
-export default PrivateRoute;
+
+
+export default ProtectedRoute;

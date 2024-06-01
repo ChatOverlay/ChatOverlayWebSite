@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const PrivateRoute = () => {
+export default function useIsAuth() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const PrivateRoute = () => {
         );
         
         if (!response.ok) {
+          console.error('Token verification failed:', response.statusText);
           return false;
         }
 
@@ -42,18 +43,11 @@ const PrivateRoute = () => {
     const checkAuthentication = async () => {
       const authenticated = await isAuthenticated();
       
-      if (!authenticated) {
-        localStorage.removeItem('token');
-        alert("유효하지 않는 토큰입니다. 다시 로그인해주세요.")
-        navigate("/");
+      if (authenticated) {
+        navigate("./home", { replace: true });
       }
    };
 
     checkAuthentication();
   }, [navigate]);
-  return <Outlet />;
-};
-
-
-
-export default PrivateRoute;
+}

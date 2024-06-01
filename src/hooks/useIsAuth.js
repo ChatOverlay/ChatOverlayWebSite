@@ -44,7 +44,7 @@ export default function useIsAuth() {
       const authenticated = await isAuthenticated();
       
       if (authenticated) {
-        navigate("./home", { replace: true });
+        navigate("./settings", { replace: true });
       }
    };
 

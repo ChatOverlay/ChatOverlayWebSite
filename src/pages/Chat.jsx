@@ -25,17 +25,19 @@ export default function Chat() {
       const newMessage = { id: Date.now(), text: text, expire: expireTime }
       setMessages((prevMessages) => [...prevMessages, newMessage])
     })
-
+  
     // 1초마다 만료된 메시지 제거
     const interval = setInterval(() => {
       setMessages((prevMessages) => prevMessages.filter((msg) => msg.expire > Date.now()))
     }, 1000)
-
+  
     return () => {
       clearInterval(interval) // 컴포넌트 언마운트 시 인터벌 정리
       socket.off('message')
     }
   }, [])
+
+
   useEffect(() => {
     const handleClearLocalStorage = () => {
       localStorage.removeItem('selectedClassroom');

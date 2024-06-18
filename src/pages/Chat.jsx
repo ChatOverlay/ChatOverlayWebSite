@@ -42,12 +42,12 @@ export default function Chat() {
     };
   }, []);
 
-  useEffect(() => {
-    const handleClearLocalStorage = () => {
-      localStorage.removeItem("selectedClassroom");
-    };
-    window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
-  }, []);
+  // useEffect(() => {
+  //   const handleClearLocalStorage = () => {
+  //     localStorage.removeItem("selectedClassroom");
+  //   };
+  //   window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
+  // }, []);
 
   return (
     <Container>

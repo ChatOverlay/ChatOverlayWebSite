@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import io from 'socket.io-client'
-const socket = io(import.meta.env.VITE_API_URL) 
+
+const socket = io(import.meta.env.VITE_API_URL, {
+  transports: ['websocket'], // 추가 옵션
+  upgrade: false // 추가 옵션
+});
 
 export default function Chat() {
   const [messages, setMessages] = useState([])
@@ -25,19 +29,17 @@ export default function Chat() {
       const newMessage = { id: Date.now(), text: text, expire: expireTime }
       setMessages((prevMessages) => [...prevMessages, newMessage])
     })
-  
+
     // 1초마다 만료된 메시지 제거
     const interval = setInterval(() => {
       setMessages((prevMessages) => prevMessages.filter((msg) => msg.expire > Date.now()))
     }, 1000)
-  
+
     return () => {
       clearInterval(interval) // 컴포넌트 언마운트 시 인터벌 정리
       socket.off('message')
     }
   }, [])
-
-
   useEffect(() => {
     const handleClearLocalStorage = () => {
       localStorage.removeItem('selectedClassroom');

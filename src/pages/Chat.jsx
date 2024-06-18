@@ -26,6 +26,8 @@ export default function Chat() {
       setMessages((prevMessages) => [...prevMessages, joinMessage]);
       joinMessageAdded.current = true;
     }
+
+    // 메시지 수신 이벤트 핸들러 등록
     socket.on("message", (message) => {
       const expireTime = Date.now() + 10000;
       // 서버로부터 받은 메시지가 객체 형태인 경우 message.text를 사용
@@ -35,24 +37,18 @@ export default function Chat() {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    // 1초마다 만료된 메시지 제거
-    const interval = setInterval(() => {
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg.expire > Date.now())
-      );
-    }, 1000);
-
     return () => {
-      clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
-      socket.off("message");
+      socket.off("message"); // 컴포넌트 언마운트 시 이벤트 핸들러 제거
     };
   }, []);
+
   useEffect(() => {
     const handleClearLocalStorage = () => {
       localStorage.removeItem("selectedClassroom");
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
+
   return (
     <Container>
       {messages.map((msg) => (

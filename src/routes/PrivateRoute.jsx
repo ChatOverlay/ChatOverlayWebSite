@@ -8,7 +8,7 @@ const PrivateRoute = () => {
     const verifyToken = async (token) => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/verifyAdmin`,
+          `${import.meta.env.VITE_API_URL}/api/admin/login`,
           {
             method: "GET",
             headers: {

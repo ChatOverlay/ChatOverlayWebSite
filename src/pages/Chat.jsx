@@ -29,7 +29,7 @@ export default function Chat() {
 
     // 메시지 수신 이벤트 핸들러 등록
     socket.on("message", (message) => {
-      const expireTime = Date.now() + 10000;
+      const expireTime = Date.now() + 100000;
       // 서버로부터 받은 메시지가 객체 형태인 경우 message.text를 사용
       // 문자열인 경우 바로 message를 사용
       const text = message.text ? message.text : message;
@@ -62,6 +62,7 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   right: 0;
+  opacity : 0.5;
   padding: 2rem;
   display: flex;
   flex-direction: column; // 메시지를 아래에서 위로 쌓도록 설정

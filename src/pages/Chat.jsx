@@ -21,7 +21,7 @@ export default function Chat() {
       const joinMessage = {
         id: Date.now(),
         text: `${classroom}에 접속을 했습니다.`,
-        expire: Date.now() + 100000,
+        expire: Date.now() + 10000,
       };
       setMessages((prevMessages) => [...prevMessages, joinMessage]);
       joinMessageAdded.current = true;
@@ -29,7 +29,7 @@ export default function Chat() {
 
     // 메시지 수신 이벤트 핸들러 등록
     socket.on("message", (message) => {
-      const expireTime = Date.now() + 100000;
+      const expireTime = Date.now() + 10000;
       // 서버로부터 받은 메시지가 객체 형태인 경우 message.text를 사용
       // 문자열인 경우 바로 message를 사용
       const text = message.text ? message.text : message;
@@ -100,5 +100,5 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 10s forwards; // 총 애니메이션 시간을 10초로 설정
+  animation: ${slideInAndUp} 100s forwards; // 총 애니메이션 시간을 10초로 설정
 `;

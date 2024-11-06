@@ -62,7 +62,7 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   right: 0;
-  opacity : 0.5;
+  opacity : 0.8;
   padding: 2rem;
   display: flex;
   flex-direction: column; // 메시지를 아래에서 위로 쌓도록 설정

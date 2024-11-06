@@ -21,7 +21,7 @@ export default function Chat() {
       const joinMessage = {
         id: Date.now(),
         text: `${classroom}에 접속을 했습니다.`,
-        expire: Date.now() + 10000,
+        expire: Date.now() + 100000,
       };
       setMessages((prevMessages) => [...prevMessages, joinMessage]);
       joinMessageAdded.current = true;

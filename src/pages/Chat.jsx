@@ -13,7 +13,6 @@ export default function Chat() {
   const joinMessageAdded = useRef(false);
 
   useEffect(() => {
-    // 로컬 스토리지에서 초기 데이터를 비동기로 불러옵니다.
     const classroom = localStorage.getItem("selectedClassroom");
     socket.emit("joinRoom", classroom);
 
@@ -27,18 +26,15 @@ export default function Chat() {
       joinMessageAdded.current = true;
     }
 
-    // 메시지 수신 이벤트 핸들러 등록
     socket.on("message", (message) => {
       const expireTime = Date.now() + 10000;
-      // 서버로부터 받은 메시지가 객체 형태인 경우 message.text를 사용
-      // 문자열인 경우 바로 message를 사용
       const text = message.text ? message.text : message;
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
     return () => {
-      socket.off("message"); // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+      socket.off("message");
     };
   }, []);
 
@@ -51,8 +47,15 @@ export default function Chat() {
 
   return (
     <Container>
-      {messages.map((msg) => (
-        <MessageBubble key={msg.id}>{msg.text}</MessageBubble>
+      {messages.map((msg, index) => (
+        <MessageBubble
+          key={msg.id}
+          style={{
+            opacity: 1 - index * 0.1 > 0 ? 1 - index * 0.1 : 0.1, // opacity를 점진적으로 줄임
+          }}
+        >
+          {msg.text}
+        </MessageBubble>
       ))}
     </Container>
   );
@@ -62,10 +65,10 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   right: 0;
-  opacity : 0.8;
+  opacity: 0.8;
   padding: 2rem;
   display: flex;
-  flex-direction: column; // 메시지를 아래에서 위로 쌓도록 설정
+  flex-direction: column;
   align-items: flex-end;
 `;
 
@@ -100,5 +103,5 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 100s forwards; // 총 애니메이션 시간을 10초로 설정
+  animation: ${slideInAndUp} 30s forwards;
 `;

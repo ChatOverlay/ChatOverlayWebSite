@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { Howl } from "howler"; // Howler.js 임포트
+
 import io from "socket.io-client";
 
 const socket = io(`${import.meta.env.VITE_API_URL}`, {
@@ -8,11 +8,7 @@ const socket = io(`${import.meta.env.VITE_API_URL}`, {
     token: localStorage.getItem("token"),
   },
 });
-// 알림 소리 파일 설정 (notification.mp3 또는 .wav 파일 경로)
-const notificationSound = new Howl({
-  src: ["../assets/notification.mp3"], // 실제 경로로 변경
-  volume: 0.5, // 소리 크기 조정
-});
+
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const joinMessageAdded = useRef(false);
@@ -37,7 +33,7 @@ export default function Chat() {
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       // 알림 소리 요청
-      notificationSound.play();
+      window.electronAPI.playNotificationSound();
     });
 
     return () => {

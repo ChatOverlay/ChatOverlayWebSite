@@ -116,5 +116,6 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 10s forwards, ${slideInAndUp} 30s linear forwards;
+  animation: ${slideInAndUp} 10s ease-in-out forwards;
+  animation-delay: 20s; /* 체류시간을 30초로 설정하기 위해 20초의 delay 추가 */
 `;

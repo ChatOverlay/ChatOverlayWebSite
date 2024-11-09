@@ -39,12 +39,19 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
+    // 사운드 재생 이벤트 처리
+    window.electronAPI.onNewChatMessage((message) => {
+      const audio = new Audio('assets/notification.mp3');
+      audio.play();
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
     const handleClearLocalStorage = () => {
       localStorage.removeItem("selectedClassroom");
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
-
+  
   return (
     <Container>
       {messages.map((msg, index) => (

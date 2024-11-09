@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import io from "socket.io-client";
+const notificationSound = new Audio("../assets/notification.mp3");
 
 const socket = io(`${import.meta.env.VITE_API_URL}`, {
   query: {
@@ -31,11 +32,9 @@ export default function Chat() {
       const text = message.text ? message.text : message;
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-      // 채팅 메시지 수신 시, 바로 소리를 재생합니다.
-      const audio = new Audio('../assets/notification.mp3'); // 알맞은 파일 경로 설정
-      audio.play().catch(error => {
-        console.error("오디오 재생 실패:", error);
+      // 알림 소리 재생
+      notificationSound.play().catch((error) => {
+        console.log("알림 소리 재생 오류:", error);
       });
     });
 
@@ -50,7 +49,7 @@ export default function Chat() {
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
-
+  
   return (
     <Container>
       {messages.map((msg, index) => (

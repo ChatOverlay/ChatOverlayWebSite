@@ -31,6 +31,11 @@ export default function Chat() {
       const text = message.text ? message.text : message;
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      const audio = new Audio('../assets/notification.mp3'); // 파일 경로 확인
+      audio.play().catch(error => {
+        console.error("오디오 재생 실패:", error);
+      });
     });
 
     return () => {

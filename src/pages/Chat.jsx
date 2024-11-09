@@ -46,6 +46,14 @@ export default function Chat() {
       localStorage.removeItem("selectedClassroom");
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
+
+    // 소리 재생 이벤트 처리
+    window.electronAPI.onPlayNotificationSound(() => {
+      const audio = new Audio('../assets/notification.mp3');
+      audio.play().catch(error => {
+        console.error("오디오 재생 실패:", error);
+      });
+    });
   }, []);
 
   return (

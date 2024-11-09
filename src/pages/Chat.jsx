@@ -32,10 +32,8 @@ export default function Chat() {
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-      const audio = new Audio('../assets/notification.mp3'); // 파일 경로 확인
-      audio.play().catch(error => {
-        console.error("오디오 재생 실패:", error);
-      });
+      // Electron에 new-message 이벤트 전달하여 소리 재생 요청
+      window.electronAPI.playNotificationSound();
     });
 
     return () => {
@@ -44,18 +42,12 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
-    window.electronAPI.onNewChatMessage((message) => {
-      const audio = new Audio('../assets/notification.mp3');
-      audio.play();
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
     const handleClearLocalStorage = () => {
       localStorage.removeItem("selectedClassroom");
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
-  
+
   return (
     <Container>
       {messages.map((msg, index) => (

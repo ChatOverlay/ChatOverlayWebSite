@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import io from "socket.io-client";
-const notificationSound = new Audio("../assets/notification.mp3");
 
 const socket = io(`${import.meta.env.VITE_API_URL}`, {
   query: {
@@ -32,10 +31,8 @@ export default function Chat() {
       const text = message.text ? message.text : message;
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      // 알림 소리 재생
-      notificationSound.play().catch((error) => {
-        console.log("알림 소리 재생 오류:", error);
-      });
+      // 알림 소리 요청
+      window.electronAPI.playNotificationSound();
     });
 
     return () => {
@@ -49,7 +46,7 @@ export default function Chat() {
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
-  
+
   return (
     <Container>
       {messages.map((msg, index) => (

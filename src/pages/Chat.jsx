@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 const socket = io(`${import.meta.env.VITE_API_URL}`, {
   query: {
-    token: localStorage.getItem("token"), // JWT 토큰을 query에 포함
+    token: localStorage.getItem("token"),
   },
 });
 
@@ -39,7 +39,6 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
-    // 사운드 재생 이벤트 처리
     window.electronAPI.onNewChatMessage((message) => {
       const audio = new Audio('../assets/notification.mp3');
       audio.play();
@@ -67,6 +66,8 @@ export default function Chat() {
     </Container>
   );
 }
+
+// 스타일 정의
 
 const Container = styled.div`
   position: fixed;
@@ -110,5 +111,5 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 30s forwards;
+  animation: ${slideInAndUp} 10s forwards, ${slideInAndUp} 30s linear forwards;
 `;

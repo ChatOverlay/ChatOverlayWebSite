@@ -108,5 +108,5 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 10s forwards;
+  animation: ${slideInAndUp} 20s forwards;
 `;

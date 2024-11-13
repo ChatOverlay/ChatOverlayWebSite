@@ -21,14 +21,14 @@ export default function Chat() {
       const joinMessage = {
         id: Date.now(),
         text: `${classroom}에 접속을 했습니다.`,
-        expire: Date.now() + 30000,
+        expire: Date.now() + 100000,
       };
       setMessages((prevMessages) => [...prevMessages, joinMessage]);
       joinMessageAdded.current = true;
     }
 
     socket.on("message", (message) => {
-      const expireTime = Date.now() + 30000;
+      const expireTime = Date.now() + 100000;
       const text = message.text ? message.text : message;
       const newMessage = { id: Date.now(), text: text, expire: expireTime };
       setMessages((prevMessages) => [...prevMessages, newMessage]);

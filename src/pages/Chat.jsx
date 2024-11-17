@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
-
 import io from "socket.io-client";
 
 const socket = io(`${import.meta.env.VITE_API_URL}`, {
@@ -29,11 +28,15 @@ export default function Chat() {
     }
 
     socket.on("message", (message) => {
-      const expireTime = Date.now() + 100000;
-      const text = message.text ? message.text : message;
-      const newMessage = { id: Date.now(), text: text, expire: expireTime };
+      const expireTime =
+        Date.now() + (message.messageType === "question" ? 120000 : 30000);
+      const newMessage = {
+        id: Date.now(),
+        text: message.text,
+        expire: expireTime,
+        messageType: message.messageType,
+      };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      // 알림 소리 요청
       window.electronAPI.playNotificationSound();
     });
 
@@ -51,11 +54,15 @@ export default function Chat() {
 
   return (
     <Container>
-      {messages.map((msg, index) => (
+      {messages.map((msg) => (
         <MessageBubble
           key={msg.id}
+          messageType={msg.messageType}
           style={{
-            opacity: 1 - index * 0.1 > 0 ? 1 - index * 0.1 : 0.1, // opacity를 점진적으로 줄임
+            opacity:
+              1 - messages.indexOf(msg) * 0.1 > 0
+                ? 1 - messages.indexOf(msg) * 0.1
+                : 0.1, // 점진적으로 투명도 감소
           }}
         >
           {msg.text}
@@ -83,15 +90,15 @@ const slideInAndUp = keyframes`
     transform: translateY(100%);
     opacity: 0;
   }
-  10% {
+  5% {  // 빠르게 올라옵니다.
     transform: translateY(0);
     opacity: 1;
   }
-  90% {
+  95% { // 지속 시간이 끝나기 직전까지 유지합니다.
     transform: translateY(0);
     opacity: 1;
   }
-  100% {
+  100% { // 빠르게 사라집니다.
     transform: translateY(-100%);
     opacity: 0;
   }
@@ -101,7 +108,8 @@ const MessageBubble = styled.div`
   max-width: 600px;
   margin-bottom: 10px;
   padding: 5px 10px;
-  background-color: #0164d8;
+  background-color: ${({ messageType }) =>
+    messageType === "question" ? "#0f9d58" : "#0164d8"};
   border: 1px solid #202c39;
   color: #fff;
   font-family: "Noto Sans KR";
@@ -109,5 +117,7 @@ const MessageBubble = styled.div`
   border-radius: 10px;
   font-size: 1.5rem;
   word-wrap: break-word;
-  animation: ${slideInAndUp} 40s forwards;
+  animation: ${slideInAndUp}
+    ${({ messageType }) => (messageType === "question" ? "120s" : "30s")}
+    forwards; // 조절된 지속 시간
 `;

@@ -82,6 +82,8 @@ const Container = styled.div`
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  
+  max-width: 600px;
   align-items: flex-end;
 `;
 
@@ -105,7 +107,6 @@ const slideInAndUp = keyframes`
 `;
 
 const MessageBubble = styled.div`
-  max-width: 600px;
   margin-bottom: 10px;
   padding: 5px 10px;
   background-color: ${({ messageType }) =>

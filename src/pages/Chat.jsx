@@ -92,7 +92,7 @@ const slideInAndUp = keyframes`
     transform: translateY(100%);
     opacity: 0;
   }
-  2% {  // 빠르게 올라옵니다.
+  3% {  // 빠르게 올라옵니다.
     transform: translateY(0);
     opacity: 1;
   }

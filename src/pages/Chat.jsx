@@ -127,5 +127,6 @@ const MessageName = styled.div`
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 5px;
-  color: black;
+  color: white;
+  opacity : 0.8;
 `;

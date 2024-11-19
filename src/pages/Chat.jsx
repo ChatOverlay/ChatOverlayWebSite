@@ -119,9 +119,10 @@ const MessageBubble = styled.div`
   font-size: 1.5rem;
   word-wrap: break-word;
   animation: ${slideInAndUp}
-    ${({ messageType }) => (messageType === "question" ? "120s" : "30s")}
+    ${({ messageType }) => (messageType === "question" ? "90s" : "25s")}
     forwards; // 조절된 지속 시간
 `;
+
 const MessageName = styled.div`
   font-size: 1rem;
   font-weight: bold;

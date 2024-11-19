@@ -34,7 +34,8 @@ export default function Chat() {
         id: Date.now(),
         text: message.text,
         expire: expireTime,
-        messageType: message.messageType,
+        messageType: message.type,
+        name: message.userName,
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       window.electronAPI.playNotificationSound();
@@ -44,14 +45,12 @@ export default function Chat() {
       socket.off("message");
     };
   }, []);
-
   useEffect(() => {
     const handleClearLocalStorage = () => {
       localStorage.removeItem("selectedClassroom");
     };
     window.electronAPI.onClearLocalStorage(handleClearLocalStorage);
   }, []);
-
   return (
     <Container>
       {messages.map((msg) => (
@@ -62,9 +61,10 @@ export default function Chat() {
             opacity:
               1 - messages.indexOf(msg) * 0.1 > 0
                 ? 1 - messages.indexOf(msg) * 0.1
-                : 0.1, // 점진적으로 투명도 감소
+                : 0.1,
           }}
         >
+          <MessageName>{msg.name}</MessageName> {/* 이름 표시 */}
           {msg.text}
         </MessageBubble>
       ))}
@@ -90,7 +90,7 @@ const slideInAndUp = keyframes`
     transform: translateY(100%);
     opacity: 0;
   }
-  5% {  // 빠르게 올라옵니다.
+  2% {  // 빠르게 올라옵니다.
     transform: translateY(0);
     opacity: 1;
   }
@@ -120,4 +120,10 @@ const MessageBubble = styled.div`
   animation: ${slideInAndUp}
     ${({ messageType }) => (messageType === "question" ? "120s" : "30s")}
     forwards; // 조절된 지속 시간
+`;
+const MessageName = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
 `;
